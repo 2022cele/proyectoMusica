@@ -1,0 +1,226 @@
+﻿@page "/lista"
+
+
+<style>
+    body{
+        text-align: center;
+        margin:0;
+    }
+
+    .autores .album .canciones {
+        display: inline-block;
+        width: 30vw;
+        height: 40vh;
+       
+        
+    }
+
+    .canciones {
+        background-color: lightblue;
+        width: 25vw;
+
+        display: inline-block;
+    }
+
+    .autores {
+        background-color: lightpink;
+        width: 25vw;
+     
+        display: inline-block;
+    }
+
+    .album {
+        background-color: lightgreen;
+        width: 25vw;
+
+        display: inline-block;
+    }
+
+    .entrada1{
+        margin-top: 50px;
+    }
+
+    .entrada2 {
+        display:inline-flex;
+        margin-top: 50px;
+    }
+
+</style>
+<body>
+
+
+</body>
+    <h1>Listas</h1>
+
+    <div class="autores">
+        <p>Lista de Autores: </p>
+        <ul>
+            @foreach (var a in listaAutor)
+            {
+                <li>ID: @a.id</li>
+                <li>Nombre : @a.Nombre</li>
+                <li>Fecha: @a.Fecha</li>
+            }
+        </ul>
+    </div>
+    <div class="canciones"
+        <p>Lista de Canciones: </p>
+        <ul>
+            @foreach (var ca in listaCancion)
+            {
+                <li>ID: @ca.id</li>
+                <li>Nombre: @ca.nombre</li>
+                <li>Duracion: @ca.tiempo</li>
+                <li>Genero: @ca.genero</li>
+            }
+        </ul>
+    </div>
+
+    <div class="album">
+        <p>Lista de Album: </p>
+
+        <ul>
+            @foreach (var al in listaAlbum)
+            {
+                <li>ID: @al.id</li>
+                <li>Nombre: @al.nombre</li>
+                <li>Autor: @al.idArtista</li>
+            }
+        </ul>
+    </div>
+
+    <br />
+
+    <div class="entrada1">
+        <input @bind="nombre" placeholder="Nombre del Autor" />
+        <input @bind="fecha" placeholder="Fecha" />
+        <button class="btn btn-primary" @onclick="AgregarAutor">Agregar Nuevo Autor</button>
+    </div>
+
+    <br />
+    
+    <div class="entrada2">
+
+        <input @bind="nombreAlbum" placeholder="Nombre del Album" />
+        
+        <select @onchange="IDSeleccionada">
+            <option value=" ">Selecciona un Autor</option>
+            @foreach (var id in listaAutor)
+            {
+                <option value="@id.id">@id.id</option>
+            }
+
+        </select>
+        <button class="btn btn-primary" @onclick="AgregarAlbum">Agregar Nuevo Album</button>
+    </div>
+    <p>ID de Autor seleccionada: @idSeleccionada</p>
+<br />
+
+    <div class="entrada3">
+
+        <input @bind="nombreCancion" placeholder="Nombre de Cancion" />
+        <input @bind="tiempo" placeholder="Duracion de Cancion" />
+        <input @bind="genero" placeholder="Genero de Cancion" />
+        
+        <select @onchange="IDASeleccionada">
+            <option value=" ">Selecciona un Album</option>
+            @foreach (var id in listaAlbum)
+            {
+                <option value="@id.id">@id.id</option>
+            }
+
+        </select>
+        <button class="btn btn-primary" @onclick="AgregarCancion">Agregar Nueva Cancion</button>
+    </div>
+    <p>ID de Autor seleccionada: @idSeleccionada</p>
+
+
+
+@code {
+    List<AutorModelo> listaAutor = new List<AutorModelo>();
+    List<AlbumModelo> listaAlbum = new List<AlbumModelo>();
+    List<CancionModelo> listaCancion = new List<CancionModelo>();
+
+    AutorModelo autor = new AutorModelo();
+    AlbumModelo album = new AlbumModelo();
+    CancionModelo cancion = new CancionModelo();
+
+    int idSeleccionada;
+    int idASeleccionada;
+
+    int idAutor = 0;
+    string nombre;
+    string newNombre;
+    string fecha;
+    string newFecha;
+
+    int idAlbum=0;
+    string nombreAlbum;
+
+
+    int idCancion=0;
+    string nombreCancion;
+    string tiempo;
+    string genero;
+
+
+    private void AgregarAutor()
+
+    {
+        if (!string.IsNullOrEmpty(nombre))
+        {
+            idAutor++;
+            listaAutor.Add(new AutorModelo { id = idAutor, Nombre = nombre, Fecha = fecha });
+            autor.Nombre = string.Empty;
+            autor.Fecha = string.Empty;
+        }
+
+    }
+
+
+    private void AgregarAlbum()
+
+    {
+        if (!string.IsNullOrEmpty(nombreAlbum) || idSeleccionada==0)
+        {
+            idAlbum++;
+            listaAlbum.Add(new AlbumModelo { id = idAlbum,nombre = nombreAlbum, idArtista = idSeleccionada  });
+            nombreAlbum = string.Empty;
+            idSeleccionada = 0;
+
+        }
+
+    }
+
+
+    private void AgregarCancion()
+
+    {
+        if (!string.IsNullOrEmpty(nombreCancion))
+        {
+            idCancion++;
+            listaCancion.Add(new CancionModelo { id = idCancion, nombre = nombreCancion, tiempo = tiempo, genero = genero, idAlbum = idASeleccionada });
+            nombreCancion = string.Empty;
+        }
+
+    }
+
+
+    private void IDSeleccionada(ChangeEventArgs e)
+    {
+        if (string.IsNullOrEmpty(e.Value.ToString()))
+        {
+            idSeleccionada = int.Parse((String)e.Value);
+        }
+
+    }
+
+    private void IDASeleccionada(ChangeEventArgs e)
+    {
+        if (string.IsNullOrEmpty(e.Value.ToString()))
+        {
+            idASeleccionada = int.Parse((String)e.Value);
+        }
+
+    }
+}

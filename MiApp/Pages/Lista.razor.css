@@ -1,0 +1,25 @@
+﻿
+
+body {
+background-color: slateblue;
+}
+
+.autores .album .canciones{
+    display: inline-block;
+    width: 50vw;
+    height: 40vh;
+    text-align: center;
+
+}
+
+.album{
+    background-color:aliceblue;
+}
+
+.autores{
+    background-color: lightpink;
+}
+
+.album{
+    background-color: lightgreen;
+}
